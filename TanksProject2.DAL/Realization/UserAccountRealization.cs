@@ -27,6 +27,13 @@ namespace TanksProject2.DAL.Realization
 
         }
 
+        public async Task<bool> Delete(UserAccount model)
+        {
+            db.UserAccounts.Remove(model);
+            await db.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<UserAccount> Get(int id)
         {
             var user =  await db.UserAccounts.FirstOrDefaultAsync(x => x.Id == id);

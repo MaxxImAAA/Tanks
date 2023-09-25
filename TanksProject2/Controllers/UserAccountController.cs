@@ -41,5 +41,12 @@ namespace TanksProject2.Controllers
             var request = await _user.EditUserAccount(id, userRegistrationDtos);
             return Ok(request);
         }
+
+        [HttpDelete]
+        public async Task<ActionResult<ServiseResponse<bool>>> DeleteUserAccount(int id)
+        {
+            var request = await _user.DeleteUserAccount(id);
+            return request;
+        }
     }
 }

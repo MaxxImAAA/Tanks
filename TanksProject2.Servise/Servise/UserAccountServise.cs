@@ -26,6 +26,40 @@ namespace TanksProject2.Servise.Servise
             this.mapper = mapper;
         }
 
+        public async Task<ServiseResponse<bool>> DeleteUserAccount(int id)
+        {
+            var servise = new ServiseResponse<bool>();
+            try
+            {
+                UserAccount userAccount = await _user.Get(id);
+                if(userAccount == null)
+                {
+                    servise.Description = "Прльзователь не найден";
+                    servise.StatusCode = Domain.Enum.StatusCode.NotFound;
+                }
+                else
+                {
+                    bool result = await _user.Delete(userAccount);
+                    if(result == true)
+                    {
+                        servise.Description = "Учетная запись удалена";
+                        servise.StatusCode = Domain.Enum.StatusCode.OK;
+                    }
+                    else
+                    {
+                        servise.Description = "Произошла ошибка при удалении пользователя";
+                        servise.StatusCode = Domain.Enum.StatusCode.BadRequest;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                servise.Description = $"[DeleteUserAccount] : {ex.Message}";
+                servise.StatusCode = Domain.Enum.StatusCode.InternalServerError;
+            }
+            return servise;
+        }
+
         public async Task<ServiseResponse<UserDtos>> EditUserAccount(int id, UserRegistrationDtos userRegistrationDtos)
         {
             var servise = new ServiseResponse<UserDtos>();

@@ -14,5 +14,6 @@ namespace TanksProject2.Servise.IServise
         Task<ServiseResponse<bool>> Register(UserRegistrationDtos userRegistrationDtos);
         Task<ServiseResponse<UserDtos>> Login (string email, string password);
         Task<ServiseResponse<UserDtos>> EditUserAccount(int id, UserRegistrationDtos userRegistrationDtos);
+        Task<ServiseResponse<bool>> DeleteUserAccount(int id);
     }
 }
