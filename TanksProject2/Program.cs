@@ -22,6 +22,8 @@ builder.Services.AddScoped<ITankServise, TankServise>();
 builder.Services.AddScoped<IUserAccountInterface, UserAccountRealization>();
 builder.Services.AddScoped<IUserAccountServise, UserAccountServise>();
 
+builder.Services.AddScoped<ISendRegistrationEmail, SendRegistrationEmail>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -17,13 +18,15 @@ namespace TanksProject2.Servise.Servise
 {
     public class UserAccountServise : IUserAccountServise
     {
+        private readonly ISendRegistrationEmail sendEmail;
         private readonly IMapper mapper;
        
         private readonly IUserAccountInterface _user;
-        public UserAccountServise(IUserAccountInterface _user, IMapper mapper)
+        public UserAccountServise(IUserAccountInterface _user, IMapper mapper, ISendRegistrationEmail sendEmail)
         {
             this._user = _user;
             this.mapper = mapper;
+            this.sendEmail = sendEmail;
         }
 
         public async Task<ServiseResponse<bool>> DeleteUserAccount(int id)
@@ -151,6 +154,8 @@ namespace TanksProject2.Servise.Servise
                 {
                     servise.Description = "Регистрация прошла успешно";
                     servise.StatusCode = Domain.Enum.StatusCode.OK;
+
+                    await sendEmail.FuncSendRegistrationEmail(userAccount.Email);
                 }
                 else
                 {
