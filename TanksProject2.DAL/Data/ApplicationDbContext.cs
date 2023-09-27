@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TanksProject2.Domain.Models.TankModel.TankComponents;
 using Microsoft.Identity.Client;
 using TanksProject2.Domain.Models.UserModel;
+using TanksProject2.Domain.Models.UserTankModel;
 
 namespace TanksProject2.DAL.Data
 {
@@ -25,6 +26,7 @@ namespace TanksProject2.DAL.Data
 
         public DbSet<UserAccount> UserAccounts { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserTank> UserTanks { get; set; }
        
        
         
@@ -43,6 +45,12 @@ namespace TanksProject2.DAL.Data
 
             modelBuilder.Entity<UserAccount>()
                 .HasOne(x => x.User).WithOne(x => x.UserAccount).HasForeignKey<User>(x => x.UserAccountId);
+
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.UserTanks).WithOne(x => x.User).HasForeignKey(x => x.UserId);
+
+            modelBuilder.Entity<Tank>()
+                .HasMany(x => x.UserTanks).WithOne(x => x.Tank).HasForeignKey(x => x.TankId);
 
             
                

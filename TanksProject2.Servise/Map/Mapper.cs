@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TanksProject2.Domain.Dtos.DtosTank;
 using TanksProject2.Domain.Dtos.TankDtos;
 using TanksProject2.Domain.Dtos.UserDtos;
+using TanksProject2.Domain.Models.TankModel;
 using TanksProject2.Domain.Models.TankModel.TankComponents;
 using TanksProject2.Domain.Models.UserModel;
 
@@ -19,6 +21,7 @@ namespace TanksProject2.Servise.Map
             CreateMap<Mobility, MobilityDtos>();
             CreateMap<Observation, ObservationDtos>();
             CreateMap<User, UserDtos>();
+            CreateMap<Tank, TankDtoUser>();
             
         }
     }

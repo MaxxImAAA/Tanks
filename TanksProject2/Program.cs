@@ -22,6 +22,9 @@ builder.Services.AddScoped<ITankServise, TankServise>();
 builder.Services.AddScoped<IUserAccountInterface, UserAccountRealization>();
 builder.Services.AddScoped<IUserAccountServise, UserAccountServise>();
 
+builder.Services.AddScoped<UserTankInterface, UserTankRealization>();
+builder.Services.AddScoped<IUserServise, UserServise>();
+
 builder.Services.AddScoped<ISendRegistrationEmail, SendRegistrationEmail>();
 
 var app = builder.Build();

@@ -16,6 +16,7 @@ namespace TanksProject2.DAL.Interfaces
         Task<List<UserAccount>> GetAll();
 
         Task<UserAccount> Get(int id);
+        
 
         Task<UserAccount> Update (UserAccount model);
 

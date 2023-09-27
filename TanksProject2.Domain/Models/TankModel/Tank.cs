@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TanksProject2.Domain.Enum;
 using TanksProject2.Domain.Models.TankModel.TankComponents;
+using TanksProject2.Domain.Models.UserTankModel;
 
 namespace TanksProject2.Domain.Models.TankModel
 {
@@ -23,5 +24,6 @@ namespace TanksProject2.Domain.Models.TankModel
         public Mobility Mobility { get; set; }
         public Observation Observation { get; set; }
         
+        public List <UserTank> UserTanks { get; set; }
     }
 }
