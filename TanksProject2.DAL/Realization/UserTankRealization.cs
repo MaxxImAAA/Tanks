@@ -28,6 +28,15 @@ namespace TanksProject2.DAL.Realization
             return true;
         }
 
+        public async Task<bool> DeleteTank(User userModel, Tank tankModel)
+        {
+            await db.Entry(userModel).Collection(x => x.UserTanks).LoadAsync();
+            var usertank = userModel.UserTanks.FirstOrDefault(x => x.TankId == tankModel.Id);
+            db.UserTanks.Remove(usertank);
+            await db.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<User> GetUserAndTanks(int userId)
         {
             return await db.Users.Include(x=>x.UserTanks).ThenInclude(x=>x.Tank).FirstOrDefaultAsync(x=>x.Id == userId);

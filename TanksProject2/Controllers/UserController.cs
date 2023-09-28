@@ -29,5 +29,12 @@ namespace TanksProject2.Controllers
             var request = await _user.GetTanks(userId);
             return Ok(request);
         }
+
+        [HttpDelete("DeleteTank")]
+        public async Task<ActionResult<ServiseResponse<bool>>> DeleteTankUser(int userId, int tankId)
+        {
+            var request = await _user.DeleteTankUser(userId, tankId);
+            return Ok(request);
+        }
     }
 }

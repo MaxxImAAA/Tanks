@@ -85,6 +85,51 @@ namespace TanksProject2.Servise.Servise
             return servise;
         }
 
+        public async Task<ServiseResponse<bool>> DeleteTankUser(int userId, int tankId)
+        {
+            var servise = new ServiseResponse<bool>();
+            try
+            {
+                var user = await _usertank.GetUserAndTanks(userId);
+                var tank = user.UserTanks.FirstOrDefault(x => x.TankId == tankId);
+                if(user == null || tank == null) 
+                {
+                    if (user == null)
+                    {
+                        servise.Description = "Пользователь не найден";
+                        servise.StatusCode = Domain.Enum.StatusCode.NotFound;
+                    }
+                    if(tank == null)
+                    {
+                        servise.Description = "У данного пользователя нет такого танка";
+                        servise.StatusCode = Domain.Enum.StatusCode.NotFound;
+                    }
+                }
+                else
+                {
+                    
+                    var res = await _usertank.DeleteTank(user, tank.Tank);
+                    if(res == true)
+                    {
+                        servise.Description = "Танк удален";
+                        servise.StatusCode = Domain.Enum.StatusCode.OK;
+                    }
+                    else
+                    {
+                        servise.Description = "Не удалось удалить танк";
+                        servise.StatusCode = Domain.Enum.StatusCode.BadRequest;
+                    }
+                }
+
+            }
+            catch(Exception ex)
+            {
+                servise.Description = $"[DeleteTankUser] : {ex.Message}";
+                servise.StatusCode = Domain.Enum.StatusCode.InternalServerError;
+            }
+            return servise;
+        }
+
         public async Task<ServiseResponse<UserTankDT>> GetTanks(int userId)
         {
             var servise = new ServiseResponse<UserTankDT>();

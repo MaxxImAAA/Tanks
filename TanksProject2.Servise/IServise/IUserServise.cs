@@ -13,5 +13,7 @@ namespace TanksProject2.Servise.IServise
         Task<ServiseResponse<bool>> AddTank(int userId, int tankId);
 
         Task<ServiseResponse<UserTankDT>> GetTanks(int userId);
+
+        Task<ServiseResponse<bool>> DeleteTankUser(int userId, int tankId);
     }
 }

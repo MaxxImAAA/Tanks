@@ -14,5 +14,7 @@ namespace TanksProject2.DAL.Interfaces
         Task<bool> Create(UserTank model);
 
         Task<User> GetUserAndTanks(int userId);
+
+        Task<bool> DeleteTank(User userModel, Tank tankModel);
     }
 }
