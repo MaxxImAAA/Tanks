@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using System;
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
@@ -20,13 +22,15 @@ namespace TanksProject2.Servise.Servise
     {
         private readonly ISendRegistrationEmail sendEmail;
         private readonly IMapper mapper;
+        private readonly IValidator<UserRegistrationDtos> _validator;
        
         private readonly IUserAccountInterface _user;
-        public UserAccountServise(IUserAccountInterface _user, IMapper mapper, ISendRegistrationEmail sendEmail)
+        public UserAccountServise(IUserAccountInterface _user, IMapper mapper, ISendRegistrationEmail sendEmail, IValidator<UserRegistrationDtos> _validator)
         {
             this._user = _user;
             this.mapper = mapper;
             this.sendEmail = sendEmail;
+            this._validator = _validator;
         }
 
         public async Task<ServiseResponse<bool>> DeleteUserAccount(int id)
@@ -132,37 +136,70 @@ namespace TanksProject2.Servise.Servise
 
         public async Task<ServiseResponse<bool>> Register(UserRegistrationDtos userRegistrationDtos)
         {
+            var validationResult = _validator.Validate(userRegistrationDtos);
             var servise = new ServiseResponse<bool>();
             try
             {
-                UserAccount userAccount = new UserAccount()
+               
+                
+                if (validationResult.IsValid)
                 {
-                    Name = userRegistrationDtos.Name,
-                    Email = userRegistrationDtos.Email,
-                    Password = userRegistrationDtos.Password
-                };
-                User user = new User()
-                {
-                    NickName = userRegistrationDtos.NickName,
-                    DataRegistration = DateTime.Now,
-                    UserAccountId = userAccount.Id,
-                    UserAccount = userAccount
-                };
-                userAccount.User = user;
-                var res = await _user.Create(userAccount);
-                if(res == true)
-                {
-                    servise.Description = "Регистрация прошла успешно";
-                    servise.StatusCode = Domain.Enum.StatusCode.OK;
+                    bool rez = await _user.NameChek(userRegistrationDtos.NickName);
+                    if (rez == true)
+                    {
+                        return new ServiseResponse<bool>()
+                        {
+                            Description = "Такой NickName уже занят",
+                            StatusCode = Domain.Enum.StatusCode.BadRequest
 
-                    await sendEmail.FuncSendRegistrationEmail(userAccount.Email);
+                        };
+                    }
+
+                    UserAccount userAccount = new UserAccount()
+                    {
+                        Name = userRegistrationDtos.Name,
+                        Email = userRegistrationDtos.Email,
+                        Password = userRegistrationDtos.Password
+                    };
+                    User user = new User()
+                    {
+                        NickName = userRegistrationDtos.NickName,
+                        DataRegistration = DateTime.Now,
+                        UserAccountId = userAccount.Id,
+                        UserAccount = userAccount
+                    };
+                    userAccount.User = user;
+                    var res = await _user.Create(userAccount);
+                    if (res == true)
+                    {
+                        servise.Description = "Регистрация прошла успешно";
+                        servise.StatusCode = Domain.Enum.StatusCode.OK;
+
+                        await sendEmail.FuncSendRegistrationEmail(userAccount.Email);
+                    }
+                    else
+                    {
+                        servise.Description = "Регистрация не удалась";
+                        servise.StatusCode = Domain.Enum.StatusCode.BadRequest;
+
+                    }
                 }
-                else
+               if(!validationResult.IsValid)
                 {
-                    servise.Description = "Регистрация не удалась";
+                    servise.ValidMessage = new List<string>();
+                    var errors = validationResult.Errors.Select(e => new
+                    {
+                        Field = e.PropertyName,  // Имя поля
+                        Message = e.ErrorMessage  // Сообщение об ошибке
+                    });
+                    foreach(var item in errors)
+                    {
+                        servise.ValidMessage.Add(item.Message);
+                    }
                     servise.StatusCode = Domain.Enum.StatusCode.BadRequest;
-
+                    servise.Description = "Неверно введенные данные";
                 }
+               
 
             }
             catch(Exception ex)

@@ -13,5 +13,6 @@ namespace TanksProject2.Domain.Models.Servise
         public T Data { get; set; }
         public string Description { get; set; }
         public StatusCode StatusCode { get; set; }
+        public List<string> ValidMessage { get; set; }
     }
 }

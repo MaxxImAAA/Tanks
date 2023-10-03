@@ -47,7 +47,16 @@ namespace TanksProject2.DAL.Realization
             
             
         }
-
+        
+        public async Task<bool> NameChek(string name)
+        {
+            var user = await db.Users.FirstOrDefaultAsync(x=>x.NickName == name);
+            if (user != null)
+                return true;
+            else
+                return false;
+        }
+        
         public async Task<UserAccount> Update(UserAccount model)
         {
             db.UserAccounts.Update(model);

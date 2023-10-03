@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TanksProject2.Domain.Models.MessageModels;
 using TanksProject2.Domain.Models.UserTankModel;
 
 namespace TanksProject2.Domain.Models.UserModel
@@ -17,5 +18,7 @@ namespace TanksProject2.Domain.Models.UserModel
         public UserAccount UserAccount { get; set; }
 
         public List<UserTank> UserTanks { get; set; }
+        
+        public List<Message> Messages { get; set; }
     }
 }

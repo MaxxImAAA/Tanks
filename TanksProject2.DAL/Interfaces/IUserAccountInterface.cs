@@ -21,5 +21,9 @@ namespace TanksProject2.DAL.Interfaces
         Task<UserAccount> Update (UserAccount model);
 
         Task<bool> Delete(UserAccount model);
+
+        //Вспомогательные
+
+        Task<bool> NameChek(string name); // Проверка на пользователя с одинаковым ником
     }
 }

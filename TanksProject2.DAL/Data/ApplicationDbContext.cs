@@ -9,6 +9,7 @@ using TanksProject2.Domain.Models.TankModel.TankComponents;
 using Microsoft.Identity.Client;
 using TanksProject2.Domain.Models.UserModel;
 using TanksProject2.Domain.Models.UserTankModel;
+using TanksProject2.Domain.Models.MessageModels;
 
 namespace TanksProject2.DAL.Data
 {
@@ -27,6 +28,8 @@ namespace TanksProject2.DAL.Data
         public DbSet<UserAccount> UserAccounts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserTank> UserTanks { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
        
        
         
@@ -52,11 +55,23 @@ namespace TanksProject2.DAL.Data
             modelBuilder.Entity<Tank>()
                 .HasMany(x => x.UserTanks).WithOne(x => x.Tank).HasForeignKey(x => x.TankId);
 
-            
-               
-               
-                
-                
+            modelBuilder.Entity<Message>()
+               .HasOne(m => m.Sender)
+               .WithMany(u => u.Messages)
+               .HasForeignKey(m => m.SenderId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Reciver)
+                .WithMany()
+                .HasForeignKey(m => m.ReciverId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+
+
+
+
 
 
 

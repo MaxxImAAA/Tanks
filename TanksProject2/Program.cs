@@ -1,7 +1,10 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TanksProject2.DAL.Data;
 using TanksProject2.DAL.Interfaces;
 using TanksProject2.DAL.Realization;
+using TanksProject2.Domain.Dtos.UserDtos;
+using TanksProject2.Domain.Validation;
 using TanksProject2.Servise.IServise;
 using TanksProject2.Servise.Servise;
 
@@ -21,9 +24,13 @@ builder.Services.AddScoped<ITankServise, TankServise>();
 
 builder.Services.AddScoped<IUserAccountInterface, UserAccountRealization>();
 builder.Services.AddScoped<IUserAccountServise, UserAccountServise>();
+builder.Services.AddScoped<IValidator<UserRegistrationDtos>, UserRegDtosValidation>();
 
 builder.Services.AddScoped<UserTankInterface, UserTankRealization>();
 builder.Services.AddScoped<IUserServise, UserServise>();
+
+builder.Services.AddScoped<IMessageInterface, MessageRealization>();
+builder.Services.AddScoped<IMessageServis, MessageServise>();
 
 builder.Services.AddScoped<ISendRegistrationEmail, SendRegistrationEmail>();
 

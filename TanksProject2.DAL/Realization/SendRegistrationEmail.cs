@@ -21,7 +21,7 @@ namespace TanksProject2.DAL.Realization
 
             var text = new TextPart("plain")
             {
-                Text = "Вы зарегистрировались на TanksProject ",
+                Text = "Вы зарегистрировались на TanksProject. ",
             };
 
             
